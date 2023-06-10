@@ -22,7 +22,7 @@ app.get('/', async (req, res) => {
 const startServer = async (req, res) => {
     try {
         connectDB(process.env.MONGODB_URL)
-        app.listen(8080, ()=> console.log('Server has started on port http://localhost:8080'))
+        app.listen(8080, ()=> console.log('Server has started on port https://ai-image-generator-lyart-delta.vercel.app/'))
     } catch (error) {
         console.log(error);
     }
