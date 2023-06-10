@@ -29,5 +29,6 @@
 // * 23. Finally giving the props(also contains the handleSearchChange function) to the FormField component in the Home.jsx
 
 
-// * Then deploying this Website on Vercel.
+// * 24. Then deploying this Website on Vercel.
+// * 25. Fixing the vercel errors by watching the onboarding page vercel deployments
 
