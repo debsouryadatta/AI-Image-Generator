@@ -32,3 +32,39 @@
 // * 24. Then deploying this Website on Vercel.
 // * 25. Fixing the vercel errors by watching the onboarding page vercel deployments
 
+
+
+
+
+
+// * Building new features for Social Media
+
+// Add Login/Register Functionality - Both Frontend and Backend
+// * 26. Create a UserSchema, create middlewares - authentication, error-handler, not-found
+// * 27. Create routes for Login/Register(With JWT and hashing)
+// * 28. Adding the Login/Register Page UI
+// * 29. Post request from both the pages and saving the received JWT on local storage
+// * 30. Also adding the logout functionality(deleting the JWT)
+
+
+// Modifying the Post route and the Post schema
+// * 31. Modifying the post schema with properties like - likes, comments, createdBy
+// * 32. Modifying the post route by adding the createdBy property before saving it to mongoDB
+
+
+
+// Check Login Route
+// * 33. Create a separate route to check authentication with the JWT sent by the user, and sent back the user details as per the JWT, to the frontend(in JSON format)
+// * 34. Taking Navbar as a separate component on the frontend, using the above route to toggle between the Login Logout button as per the sent json of the above route
+// * 35. The checkLogin route will also be handy, we can check if the user is logged in or not before liking and commenting
+
+
+
+
+// Adding Like & Comment functionality
+// * 36. Create like & comment schema and routes (For now we are not putting any restrictions on likes and comments)
+// * 37. Create the frontend for like & comment
+// * 38. Also Like and comment should be protected route, so authentication middleware should be present before liking or commenting
+
+
+// For now thats it, further modification coming soon!
