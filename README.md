@@ -78,5 +78,6 @@ Building new features for Social Media
 
 
 // Update Profile feature
-43. We will be using shadcn ui for the dialog component
+43. We will be using material tailwind for the dialog component(shadcn/ui vite only with ts)
+
 

@@ -1,36 +1,49 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Input,
+  Textarea,
+} from "@material-tailwind/react";
 
 const Profile = () => {
   // For Login/Logoout
   const [checkLogin, setCheckLogin] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  // http://localhost:8080
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => setOpen(!open);
 
   useEffect(() => {
     const checkLoginFunc = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8080/api/v1/checklogin", {
+        const response = await fetch(
+          "http://localhost:8080/api/v1/checklogin",
+          {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          });
-          const data = await response.json();
-          if (data.success) {
-            setCheckLogin(true);
-            setName(data.message.name);
-            setEmail(data.message.email);
-          } else {
-            setCheckLogin(false);
           }
+        );
+        const data = await response.json();
+        if (data.success) {
+          setCheckLogin(true);
+          setName(data.message.name);
+          setEmail(data.message.email);
+        } else {
+          setCheckLogin(false);
+        }
       } catch (error) {
         console.log(error);
       }
-
     };
 
     checkLoginFunc();
@@ -46,20 +59,98 @@ const Profile = () => {
       />
       <div className="flex flex-col items-center">
         <div className="flex flex-col justify-center p-6 shadow-md rounded-xl w-[70%]">
-          <span className="w-24 h-24 rounded-full object-cover bg-[#6469ff] flex justify-center items-center text-white text-5xl text-center font-bold mx-auto">
-            {name[0]?.toUpperCase()}
+          <span className="w-24 h-24 rounded-full object-cover flex justify-center items-center text-white text-5xl text-center font-bold mx-auto">
+            {/* {name[0]?.toUpperCase()} */}
+            <img className="object-contain" src="https://res.cloudinary.com/diyxwdtjd/image/upload/v1687541643/Personal/DP_circle_o9wokj.png" alt="" />
           </span>
           <div className="space-y-4 text-center divide-y">
             <div className="my-2 space-y-1">
               <h2 className="text-xl font-semibold sm:text-2xl">{name}</h2>
-              <p className="px-5 text-xs sm:text-base dark:text-gray-400">
-                {email}
-              </p>
+
+
+              {/* <!-- Bio --> */}
+              <div className="mt-2 flex items-center justify-center">
+                <div className="mt-2 text-sm w-[100%] sm:w-[50%]">
+                  Fitness Fanatic, Design Enthusiast, Mentor, Meetup Organizer &
+                  PHP Lover.
+                </div>
+              </div>
+            </div>
+
+            {/* <!-- Card footer --> */}
+            <div className="border-t border-gray-200">
+              <div className="flex divide-x divide-gray-200r">
+                <a
+                  className="block flex-1 text-center text-sm text-indigo-500 hover:text-indigo-600 font-medium px-3 py-4"
+                  href="#0"
+                >
+                  <div className="flex items-center justify-center">
+                    <svg
+                      className="w-4 h-4 fill-current flex-shrink-0 mr-2"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M8 0C3.6 0 0 3.1 0 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7zm4 10.8v2.3L8.9 12H8c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8z" />
+                    </svg>
+                    <span>Chat</span>
+                  </div>
+                </a>
+                <button
+                  onClick={handleOpen}
+                  className="block flex-1 text-center text-sm text-gray-600 hover:text-gray-800 font-medium px-3 py-4 group"
+                  href="#0"
+                >
+                  <div className="flex items-center justify-center">
+                    <svg
+                      className="w-4 h-4 fill-current text-gray-400 group-hover:text-gray-500 flex-shrink-0 mr-2"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z" />
+                    </svg>
+                    <span>Edit Profile</span>
+                  </div>
+                </button>
+
+                {/* Dialog implementation */}
+                <Dialog open={open} handler={handleOpen}>
+                  <div className="flex items-center justify-between">
+                    <DialogHeader>Update Profile</DialogHeader>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="mr-3 h-5 w-5"
+                      onClick={handleOpen}
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <DialogBody divider>
+                    <div className="grid gap-6">
+                      <Input label="Profile Picture URL" />
+                      <Input label="Username" />
+                      <Textarea label="About" />
+                    </div>
+                  </DialogBody>
+                  <DialogFooter className="space-x-2">
+                    <Button variant="outlined" color="red" onClick={handleOpen}>
+                      close
+                    </Button>
+                    <Button
+                      variant="gradient"
+                      // color="green"
+                      onClick={handleOpen}
+                    >
+                      update profile
+                    </Button>
+                  </DialogFooter>
+                </Dialog>
+              </div>
             </div>
           </div>
-          {/* <form className="flex flex-col justify-center items-center">
-        <input className="w-[70%] p-2 m-2 border-2 border-gray-400 rounded-lg" type="text" placeholder="Name"/>
-        </form> */}
         </div>
       </div>
     </>
