@@ -86,5 +86,6 @@ Building new features for Social Media
 
 -> Update Profile feature
 
-43. We will be using shadcn ui for the dialog component
+43. We created the ui for the profile page, for the dialog component, we used - Material Tailwind
+44. Link the cards' avatar to the profile page 
 

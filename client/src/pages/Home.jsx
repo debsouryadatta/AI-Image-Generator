@@ -20,33 +20,6 @@ const Home = () => {
   const [searchedResults, setSearchedResults] = useState(null);
   const [searchTimeout, setSearchTimeout] = useState(null);
 
-  // For Login/Logoout
-  const [checkLogin, setCheckLogin] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-
-  useEffect(() => {
-    const checkLoginFunc = async () => {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/api/v1/checklogin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if (data.success) {
-        setCheckLogin(true);
-        setName(data.message.name);
-        setEmail(data.message.email);
-      } else {
-        setCheckLogin(false);
-      }
-    };
-
-    checkLoginFunc();
-  }, []);
 
   //   For getting the posts
   useEffect(() => {
@@ -95,7 +68,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar checkLogin={checkLogin} setCheckLogin={setCheckLogin} name={name} email={email}/>
+      <Navbar />
       <section className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <div>

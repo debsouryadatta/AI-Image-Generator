@@ -20,8 +20,6 @@ const CreatePost = () => {
 
   // For Login/Logoout
   const [checkLogin, setCheckLogin] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   useEffect(() => {
     const checkLoginFunc = async () => {
       const token = localStorage.getItem("token");
@@ -117,7 +115,7 @@ const CreatePost = () => {
 
   return (
     <>
-      <Navbar checkLogin={checkLogin} setCheckLogin={setCheckLogin} name={name} email={email}/>
+      <Navbar />
       <section className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <div>

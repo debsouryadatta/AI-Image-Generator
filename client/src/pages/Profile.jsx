@@ -9,17 +9,29 @@ import {
   Input,
   Textarea,
 } from "@material-tailwind/react";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
   // For Login/Logoout
   const [checkLogin, setCheckLogin] = useState(false);
+  const [nameFromJWT, setNameFromJWT] = useState("");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [profilePicUrl, setProfilePicUrl] = useState('');
+  const [about, setAbout] = useState('About section not updated.');
+  const [followers, setFollowers] = useState(0);
+  const [following, setFollowing] = useState(0);
+  const [inpPicUrl, setInpPicUrl] = useState('')
+  const [inpName, setInpName] = useState('')
+  const [inpAbout, setInpAbout] = useState('')
+
+  const { name: userName } = useParams();
+
 
   const handleOpen = () => setOpen(!open);
 
   useEffect(() => {
+
     const checkLoginFunc = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -36,8 +48,7 @@ const Profile = () => {
         const data = await response.json();
         if (data.success) {
           setCheckLogin(true);
-          setName(data.message.name);
-          setEmail(data.message.email);
+          setNameFromJWT(data.message.name)
         } else {
           setCheckLogin(false);
         }
@@ -46,22 +57,60 @@ const Profile = () => {
       }
     };
 
+
+
+    const getUserDetails = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/v1/getUserDetails",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: userName }),
+          }
+        );
+        const data = await response.json();
+        setName(data.message.name);
+        setEmail(data.message.email);
+        { data.message.profilePicUrl && setProfilePicUrl(data.message.profilePicUrl) }
+        { data.message.about && setAbout(data.message.about) }
+        { data.message.followers && setFollowers(data.message.followers) }
+        { data.message.following && setFollowing(data.message.following) }
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getUserDetails();
     checkLoginFunc();
   }, []);
+
+
+  const updateProfile = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    try {
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
       <Navbar
-        checkLogin={checkLogin}
-        setCheckLogin={setCheckLogin}
-        name={name}
-        email={email}
       />
       <div className="flex flex-col items-center">
         <div className="flex flex-col justify-center p-6 shadow-md rounded-xl w-[70%]">
-          <span className="w-24 h-24 rounded-full object-cover flex justify-center items-center text-white text-5xl text-center font-bold mx-auto">
+          <span className="w-24 h-24 rounded-full object-cover flex justify-center items-center text-white text-5xl text-center font-bold mx-auto bg-[#6469ff]">
+            {
+              profilePicUrl ? <img className="object-contain" src={profilePicUrl} alt="" /> : name[0]?.toUpperCase()
+            }
             {/* {name[0]?.toUpperCase()} */}
-            <img className="object-contain" src="https://res.cloudinary.com/diyxwdtjd/image/upload/v1687541643/Personal/DP_circle_o9wokj.png" alt="" />
+            {/* <img className="object-contain" src="https://res.cloudinary.com/diyxwdtjd/image/upload/v1687541643/Personal/DP_circle_o9wokj.png" alt="" /> */}
           </span>
           <div className="space-y-4 text-center divide-y">
             <div className="my-2 space-y-1">
@@ -71,13 +120,36 @@ const Profile = () => {
               {/* <!-- Bio --> */}
               <div className="mt-2 flex items-center justify-center">
                 <div className="mt-2 text-sm w-[100%] sm:w-[50%]">
-                  Fitness Fanatic, Design Enthusiast, Mentor, Meetup Organizer &
-                  PHP Lover.
+                  {about}
                 </div>
               </div>
             </div>
 
-            {/* <!-- Card footer --> */}
+            {/* <!-- Followers/FOllowing --> */}
+            <div className="border-t border-gray-200">
+              <div className="flex divide-x divide-gray-200r">
+                <a
+                  className="block flex-1 text-center text-sm text-indigo-500 hover:text-indigo-600 font-medium px-3 py-4"
+                  href="#0"
+                >
+                  <div className="flex items-center justify-center">
+                    <span>{followers} Followers</span>
+                  </div>
+                </a>
+                <button
+                  // onClick={handleOpen}
+                  className="block flex-1 text-center text-sm text-gray-600 hover:text-gray-800 font-medium px-3 py-4 group"
+                  href="#0"
+                >
+                  <div className="flex items-center justify-center">
+                    <span>{following} Following</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+
+            {/* <!-- Update Profile --> */}
             <div className="border-t border-gray-200">
               <div className="flex divide-x divide-gray-200r">
                 <a
@@ -94,7 +166,7 @@ const Profile = () => {
                     <span>Chat</span>
                   </div>
                 </a>
-                <button
+                {nameFromJWT === userName ? <button
                   onClick={handleOpen}
                   className="block flex-1 text-center text-sm text-gray-600 hover:text-gray-800 font-medium px-3 py-4 group"
                   href="#0"
@@ -108,7 +180,17 @@ const Profile = () => {
                     </svg>
                     <span>Edit Profile</span>
                   </div>
+                </button> : <button
+                  // onClick={handleOpen}
+                  className="block flex-1 text-center text-sm text-gray-600 hover:text-gray-800 font-medium px-3 py-4 group"
+                  href="#0"
+                >
+                  <div className="flex items-center justify-center">
+                    <span>Follow</span>
+                  </div>
                 </button>
+                }
+
 
                 {/* Dialog implementation */}
                 <Dialog open={open} handler={handleOpen}>
@@ -150,6 +232,8 @@ const Profile = () => {
                 </Dialog>
               </div>
             </div>
+
+
           </div>
         </div>
       </div>

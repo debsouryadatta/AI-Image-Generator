@@ -13,9 +13,7 @@ const Post = new mongoose.Schema(
       required: [true, "Please provide user"],
     },
   },
-  { timestamps: true },
-  { collection: "posts" }
-);
+  { timestamps: true });
 
 const PostSchema = mongoose.model("Post", Post);
 
