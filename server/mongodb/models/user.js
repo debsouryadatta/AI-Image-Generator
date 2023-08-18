@@ -15,6 +15,18 @@ const User = new mongoose.Schema({
         ],
         unique: true,
     },
+    about: {
+        type: String
+    },
+    profilePicUrl: {
+        type: String
+    },
+    followers: {
+        type: String
+    },
+    following: {
+        type: String
+    }
 })
 
 const UserSchema = mongoose.model('User', User);

@@ -1,6 +1,8 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../mongodb/models/user.js";
+import authMiddleware from '../middlewares/authentication.js'
+
 
 const router = express.Router();
 
@@ -48,15 +50,17 @@ router.route("/getUserDetails").post(async (req, res) => {
 
 
 // Route for updating the user profile
-router.route("/updateProfile").post(async (req, res) => {
-  const { name } = req.body;
+router.route("/updateProfile").post(authMiddleware, async (req, res) => {
+  const { name, profilePicUrl, about } = req.body;
+  console.log(req.body);
+  const { userId } = req.user;
   try {
-    const user = await User.findOne({ name: name });
-    if (user) {
-      res.status(200).json({ success: true, message: user });
-    } else {
-      res.status(401).json({ success: false });
+    const userNameExists = await User.findOne({ name: name });
+    if (userNameExists) {
+      res.status(403).json({ success: false, message: "User already exists" });
     }
+    const user = await User.findOneAndUpdate({_id: userId}, req.body, {new:true,runValidators:true});
+    res.status(200).json({ success: true, message: user });
   } catch (error) {
     console.log(error);
   }

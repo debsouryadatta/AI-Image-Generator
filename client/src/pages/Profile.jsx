@@ -73,7 +73,6 @@ const Profile = () => {
         );
         const data = await response.json();
         setName(data.message.name);
-        setEmail(data.message.email);
         { data.message.profilePicUrl && setProfilePicUrl(data.message.profilePicUrl) }
         { data.message.about && setAbout(data.message.about) }
         { data.message.followers && setFollowers(data.message.followers) }
@@ -89,11 +88,28 @@ const Profile = () => {
   }, []);
 
 
-  const updateProfile = async (e) => {
-    e.preventDefault();
+  const updateProfile = async () => {
     const token = localStorage.getItem("token");
     try {
-      
+      const response = await fetch(
+        "http://localhost:8080/api/v1/updateProfile",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            profilePicUrl: inpPicUrl? inpPicUrl : profilePicUrl,
+            name: inpName? inpName : name,
+            about: inpAbout? inpAbout : about,
+          }),
+        }
+      );
+      const data = await response.json();
+      { data.message.name && setName(data.message.name) }
+      { data.message.profilePicUrl && setProfilePicUrl(data.message.profilePicUrl) }
+      { data.message.about && setAbout(data.message.about) }
     } catch (error) {
       console.log(error);
     }
@@ -212,9 +228,9 @@ const Profile = () => {
                   </div>
                   <DialogBody divider>
                     <div className="grid gap-6">
-                      <Input label="Profile Picture URL" />
-                      <Input label="Username" />
-                      <Textarea label="About" />
+                      <Input onChange={(e)=> setProfilePicUrl(e.target.value)} label="Profile Picture URL" />
+                      <Input onChange={(e)=> setName(e.target.value)} label="Name" />
+                      <Textarea onChange={(e)=> setAbout(e.target.value)} label="About" />
                     </div>
                   </DialogBody>
                   <DialogFooter className="space-x-2">
@@ -224,7 +240,10 @@ const Profile = () => {
                     <Button
                       variant="gradient"
                       // color="green"
-                      onClick={handleOpen}
+                      onClick={()=> {
+                        handleOpen();
+                        updateProfile();
+                      }}
                     >
                       update profile
                     </Button>

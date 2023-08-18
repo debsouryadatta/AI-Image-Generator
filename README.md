@@ -84,8 +84,10 @@ Building new features for Social Media
 
 
 
--> Update Profile feature
+-> Profile page features
 
 43. We created the ui for the profile page, for the dialog component, we used - Material Tailwind
-44. Link the cards' avatar to the profile page 
+44. Link the cards' avatar to the profile page & also the navbar's avatar, getting the username as routeParams 
+45. Updating the profile - created the frontend axios post req, created the backend route for updating the profile
+46. Got stuck in one issue i.e. - when we change the username, the JWT needs to be changed since the JWT contains the username in itself
 
